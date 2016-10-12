@@ -1,6 +1,6 @@
 require_relative('../db/sql_runner')
 
-class Pets
+class Pet
 
   attr_reader :id, :name, :type, :pet_store_id
 

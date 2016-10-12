@@ -10,25 +10,19 @@ class PetStore
     @address = options['address']
   end
 
+  #------------- Create and Save Pet Stores ----------
   def save
     sql = "INSERT INTO pet_store (name, address) VALUES ('#{@name}', '#{@address}') RETURNING *"
     pet_store = SqlRunner.run(sql).first
     @id = pet_store['id'].to_i
   end
 
+  #-------------- List all the pets of a store ------
   def list_of_pets
     sql = "SELECT * FROM pets WHERE pet_store_id = #{@id}"
     pets = SqlRunner.run(sql)
-    result = pets.map { |pet| Pets.new(pet) }
+    result = pets.map { |pet| Pet.new(pet) }
     return result
   end
-
-  # def albums
-  #   sql = "SELECT * FROM albums WHERE artist_id = #{@id}"
-
-  #   albums = SqlRunner.run(sql)
-  #   result = albums.map { |album| Album.new(album) }
-  #   return result
-  # end
 
 end
