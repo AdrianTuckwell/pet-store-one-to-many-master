@@ -2,10 +2,11 @@ require_relative('../db/sql_runner')
 
 class PetStore
 
-  attr_reader :id, :name, :address
+  attr_reader :id
+  attr_accessor :name, :address
 
   def initialize(options)
-    @id = options['id'].to_i
+    @id = options['id'].to_i if options['id'] != nil
     @name = options['name']
     @address = options['address']
   end
@@ -25,4 +26,35 @@ class PetStore
     return result
   end
 
-end
+  #------------ Find Pet Stores by their ID ---------
+  def find_by_id(id)
+    sql = "SELECT * FROM pet_store WHERE id = #{id}"
+    pet_store = SqlRunner.run(sql).first
+    return pet_store
+  end
+
+  #------------ Edit Pet Stores ---------------------
+  def update
+    sql = "UPDATE pet_store SET 
+      name = '#{ @name }',
+      address = '#{ @address }'
+      WHERE id = #{@id};"
+    SqlRunner.run(sql)
+    return nil
+  end
+
+  #------------ Delete Pet Stores -------------------
+  def self.delete(id)
+    sql = "DELETE FROM pet_store WHERE id = #{id}"
+    SqlRunner.run(sql)
+  end
+
+  #------------ List All Pet Stores -----------------
+  def self.list
+    sql = "SELECT * FROM pet_store"
+    pet_stores = SqlRunner.run(sql)
+    result = pet_stores.map { |store| PetStore.new(store)}
+    return result
+  end
+
+end #--- PetStore end -----------------
